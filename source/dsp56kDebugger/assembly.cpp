@@ -249,7 +249,7 @@ namespace dsp56kDebugger
 	}
 }
 
-wxBEGIN_EVENT_TABLE(dsp56kDebugger::Assembly, wxStyledTextCtrl)
+wxBEGIN_EVENT_TABLE(dsp56kDebugger::Assembly, StyledTextCtrl)
 	EVT_STC_CHANGE(wxID_ANY, Assembly::onChange)
 	EVT_STC_PAINTED(wxID_ANY, Assembly::onChange)
 	EVT_STC_DOUBLECLICK(wxID_ANY, Assembly::onDoubleClick)

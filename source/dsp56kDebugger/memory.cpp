@@ -194,7 +194,7 @@ namespace dsp56kDebugger
 		refresh();
 	}
 
-	wxBEGIN_EVENT_TABLE(Memory, wxStyledTextCtrl)
+	wxBEGIN_EVENT_TABLE(Memory, StyledTextCtrl)
 		EVT_LEFT_DOWN(Memory::onLeftMouseDown)
 	wxEND_EVENT_TABLE()
 }
