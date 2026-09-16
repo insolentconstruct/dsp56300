@@ -185,6 +185,14 @@ namespace dsp56k
 
 		ASMJIT_FORCE_INLINE void exec() noexcept
 		{
+			// No instruction runs after terminate(). The interpreter's do_start() leaves a DO loop on
+			// terminate without unwinding it, so resuming inside the loop body (the rest of
+			// DSPThread's batch) pops the loop's stack frames as return addresses and jumps to a stale
+			// LA. A terminated DSP was not restartable before this either: do_start() ends every DO
+			// loop at once from then on.
+			if(m_terminate.load(std::memory_order_relaxed))
+				return;
+
 			if(g_useJIT)
 				execJit();
 			else
