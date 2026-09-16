@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <functional>
 #include <mutex>
 #include <memory>
@@ -65,7 +66,7 @@ namespace dsp56k
 		bool m_threadStarted = false;
 #endif
 
-		bool m_runThread;
+		std::atomic<bool> m_runThread;
 
 		Callback m_callback;
 
