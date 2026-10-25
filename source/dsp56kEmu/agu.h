@@ -26,6 +26,18 @@ namespace dsp56k
 		template<bool add>
 		static void updateAddressRegister( TWord& r, TWord n, TWord m, TWord moduloMask, int32_t modulo )
 		{
+			// linear addressing (set_m gives it mask $ffffff and modulo 0) needs none of the bounds below. The mask
+			// alone does not tell, a modulo M with bits above 15 set gets mask $ffffff as well
+			if (moduloMask == 0xffffff && !modulo)
+			{
+				if constexpr (add)
+					r += n;
+				else
+					r -= n;
+				r &= 0x00ffffff;
+				return;
+			}
+
 			// modulo or linear addressing
 			if (moduloMask)
 			{
