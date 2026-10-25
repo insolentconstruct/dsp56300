@@ -781,18 +781,18 @@ namespace dsp56k
 				return;
 			}
 
-			if( test < (-140737488355328ll << g_aluShift) )	// ff 800000 000000
+			// in range is ff 800000 000000 <= test < 00 800000 000000, one unsigned compare, which cannot overflow
+			constexpr int64_t lo = -(140737488355328ll << g_aluShift);
+			constexpr uint64_t range = static_cast<uint64_t>(-lo) << 1;
+			if( ASMJIT_LIKELY(static_cast<uint64_t>(test) - static_cast<uint64_t>(lo) < range) )
 			{
-				sr_set( CCR_L );
-				_dst = 0x800000;
-			}
-			else if( test >= (140737488355328ll << g_aluShift) )	// 00 800000 000000
-			{
-				sr_set( CCR_L );
-				_dst = 0x7FFFFF;
+				_dst = static_cast<int>(_src.var >> (24 + g_aluShift)) & 0xffffff;
 			}
 			else
-				_dst = static_cast<int>(_src.var >> (24 + g_aluShift)) & 0xffffff;
+			{
+				sr_set( CCR_L );
+				_dst = test < 0 ? 0x800000 : 0x7FFFFF;
+			}
 			assert( (_dst & 0xff000000) == 0 );
 		}
 
