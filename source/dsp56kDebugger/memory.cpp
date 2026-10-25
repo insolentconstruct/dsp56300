@@ -160,7 +160,8 @@ namespace dsp56kDebugger
 
 	void Memory::evGotoAddress(dsp56k::TWord _addr)
 	{
-		if(isFocused())
+		// the dialog has just closed, the focus may not be back yet
+		if(isFocused() || isLastFocused())
 		{
 			const auto line = _addr / m_columnCount;
 			GotoLine(static_cast<int>(line));
