@@ -71,6 +71,9 @@ namespace dsp56kDebugger
 
 		const auto prevLine = GetCurrentLine();
 
+		// Remove() and InsertText() can scroll the view, and a periodic refresh must not scroll away from where the user is
+		const auto firstVisibleLine = GetFirstVisibleLine();
+
 		const auto count = lastDifferent - firstDifferent + 1;
 
 		const int posStart = firstDifferent > 0 ? GetLineEndPosition(firstDifferent-1) + 1 : 0;
@@ -92,6 +95,8 @@ namespace dsp56kDebugger
 		const auto newLine = GetCurrentLine();
 		if(newLine != prevLine)
 			GotoLine(prevLine);
+
+		SetFirstVisibleLine(firstVisibleLine);
 	}
 
 	void StyledTextCtrl::addMarker(int _line, int _marker)
